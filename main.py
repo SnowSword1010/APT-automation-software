@@ -34,86 +34,55 @@ instructionsLabel = tk.Label(root, text = instructionsText, font = instructionsF
 instructionsLabel.grid(row=2, column=0, pady= (20,15), columnspan=3)
 
 # CONFIGURE LINES WIDGET
-# HeadingFont = tkinter.font.Font(family = "Raleway", size = 12, weight="bold")
-# HeadingText = "Configure Lines"
-# HeadingLabel = tk.Label(root, text = HeadingText, font=HeadingFont, justify="left")
-# HeadingLabel.grid(row=3, column=0, sticky='W', columnspan = 3)
+HeadingFont = tkinter.font.Font(family = "Raleway", size = 12, weight="bold")
+HeadingText = "Configure Lines"
+HeadingLabel = tk.Label(root, text = HeadingText, font=HeadingFont, justify="left")
+HeadingLabel.grid(row=3, column=0, sticky='W', columnspan = 3)
+
 global lineObjs
 lineObjs = []
 global r
-r = 0
+r = 5
 
 class line:
-    def __init__(self, line_button, select_dir_button, send_button) -> None:
+    def __init__(self, line_button, select_dir_button, send_button):
         self.line_button = line_button
         self.select_dir_button = select_dir_button
         self.send_button = send_button
 
-# CREATE LINE FUNCTION
-def createDummyLine():
-    line_button = tk.Button(root, text="Line", command=lambda: custom_click(), padx=10, pady=5)
-    select_dir_button = tk.Button(root, text="Select Folder", command=lambda: custom_click(), padx=10, pady=5)
-    send_button = tk.Button(root, text="Send", command=lambda: custom_click(), padx=10, pady=5)
+def click():
+    return
+
+def add_line_clicked():
+    global r
+    line_button = tk.Button(root, text="Line " + str(r-5+1), command=lambda: click(), padx=10, pady=5)
+    select_dir_button = tk.Button(root, text="Select Folder", command=lambda: click(), padx=10, pady=5)
+    send_button = tk.Button(root, text="Send", command=lambda: click(), padx=10, pady=5)
 
     temp = line(line_button, select_dir_button, send_button)
     lineObjs.append(temp)
     print(lineObjs)
-    j = 0
-    for widgets in frame.winfo_children():
-        if(j > 2):
-            widgets.destroy()
-            global r
-            r=1
-        j+=1
-    
-    for i in range(0, len(lineObjs)):
-        lineObjs[i].line_button.grid(row=r, column=0, padx=(81, 81))
-        lineObjs[i].select_dir_button.grid(row=r, column=1, padx=(81, 81))
-        lineObjs[i].send_button.grid(row=r, column=2, padx=(81 , 81))
-        r+=1
 
-    # line_button.grid(row=0, column=0, padx=(81, 81))
-    # select_dir_button.grid(row=0, column=1, padx=(81, 81))
-    # send_button.grid(row=0, column=2, padx=(81 , 81))
+    # for i in range(0, len(lineObjs)):
+    print("r is : " + str(r) )
+    print(lineObjs[r-5].line_button)
+    lineObjs[r-5].line_button.grid(row=r, column=0, padx=(81, 81))
+    lineObjs[r-5].select_dir_button.grid(row=r, column=1, padx=(81, 81))
+    lineObjs[r-5].send_button.grid(row=r, column=2, padx=(81 , 81))
+    r+=1
 
-# LINE FUNCTIONS
-def custom_click():
-    print("I was clicked")
-    return
-
-# ADD, REMOVE, UPDATE BUTTON FUNCTIONS
-
-def add_line_clicked():
-    createDummyLine()
     print("Add line clicked")
     return
 
-def update_line_clicked():
-    print("Update line clicked")
-    return
 
-def remove_line_clicked():
-    print("Remove line clicked")
-    return
-
-# ADD, REMOVE, UPDATE BUTTON FRAME
-frame = tk.LabelFrame(root, text="Configure Lines", pady=10)
-frame.grid(row=3, column=0, columnspan=3, sticky='W')
 
 # ADD, REMOVE, UPDATE BUTTON WIDGETS
-add_button = tk.Button(frame, text="Add Line", command=lambda: add_line_clicked(), padx=10, pady=5)
-update_button = tk.Button(frame, text="Update Line", command=lambda: update_line_clicked(), padx=10, pady=5)
-remove_button = tk.Button(frame, text="Remove Line", command=lambda: remove_line_clicked(), padx=10, pady=5)
+add_button = tk.Button(root, text="Add Line", command=lambda: add_line_clicked(), padx=10, pady=(5))
+update_button = tk.Button(root, text="Update Line", command=lambda: click(), padx=10, pady=5)
+remove_button = tk.Button(root, text="Remove Line", command=lambda: click(), padx=10, pady=5)
 
-add_button.grid(row=r, column=0, padx=(81, 81))
-update_button.grid(row=r, column=1, padx=(81, 81))
-remove_button.grid(row=r, column=2, padx=(81 , 81))
-r+=1
-
-for i in range(0, len(lineObjs)):
-    lineObjs[i].line_button.grid(row=r, column=0, padx=(81, 81))
-    lineObjs[i].select_dir_button.grid(row=r, column=1, padx=(81, 81))
-    lineObjs[i].send_button.grid(row=r, column=2, padx=(81 , 81))
-    r+=1
+add_button.grid(row=4, column=0, padx=(81,81), pady=(5,10))
+update_button.grid(row=4, column=1, padx=(81,81), pady=(5,10))
+remove_button.grid(row=4, column=2, padx=(81,81), pady=(5,10))
 
 root.mainloop()
