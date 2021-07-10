@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.font
 from PIL import Image, ImageTk
+import tkinter.filedialog
 
 root = tk.Tk()
 
@@ -39,39 +40,49 @@ HeadingText = "Configure Lines"
 HeadingLabel = tk.Label(root, text = HeadingText, font=HeadingFont, justify="left")
 HeadingLabel.grid(row=3, column=0, sticky='W', columnspan = 3)
 
+# each element represents line buttons (line, select folder, send)
 global lineObjs
 lineObjs = []
 
 class line:
-    def __init__(self, line_button, select_dir_button, send_button):
-        self.line_button = line_button
-        self.select_dir_button = select_dir_button
-        self.send_button = send_button
+
+    # instance variables => {browse_text, line_button, select_dir_button, send_button}
+    def __init__(self):
+
+        # variable that stores the state of our select folder button
+        self.browse_text = tk.StringVar()
+
+        # function used to update the text of select folder button ; also used to get the store the selected directory path
+        def open_folder():
+            folder_selected = tkinter.filedialog.askdirectory()
+            print(folder_selected)
+            if(folder_selected == ()):
+                self.browse_text.set("Select Folder")
+            else:
+                arr = folder_selected.split('/')
+                text = arr[len(arr) - 1]
+                text = (text[:10] + '...') if len(text) > 13 else text
+                self.browse_text.set(text)
+            return
+
+        # line_button => gives info pertaining to a line
+        self.line_button = tk.Button(root, text="Line " + str(i+1), command=lambda: click(), padx=10, pady=5)
+
+        # select_dir button => adding browse functionality
+        self.select_dir_button = tk.Button(root, textvariable=self.browse_text, command=lambda: open_folder(), padx=10, pady=5)
+        self.browse_text.set("Select Folder")
+
+
+        self.send_button = tk.Button(root, text="Send", command=lambda: click(), padx=10, pady=5)
 
 def click():
     return
 
-
 for i in range(0, 6):
-    line_button = tk.Button(root, text="Line " + str(i+1), command=lambda: click(), padx=10, pady=5)
-    select_dir_button = tk.Button(root, text="Select Folder", command=lambda: click(), padx=10, pady=5)
-    send_button = tk.Button(root, text="Send", command=lambda: click(), padx=10, pady=5)
-
-    temp = line(line_button, select_dir_button, send_button)
+    temp = line()
     lineObjs.append(temp)
-
     lineObjs[i].line_button.grid(row=i+5, column=0, padx=(81, 81), pady=(8,5))
     lineObjs[i].select_dir_button.grid(row=i+5, column=1, padx=(81, 81), pady=(8,5))
     lineObjs[i].send_button.grid(row=i+5, column=2, padx=(81 , 81), pady=(8,5))
-
-
-# # ADD, REMOVE, UPDATE BUTTON WIDGETS
-# add_button = tk.Button(root, text="Add Line", command=lambda: add_line_clicked(), padx=10, pady=(5))
-# update_button = tk.Button(root, text="Update Line", command=lambda: click(), padx=10, pady=5)
-# remove_button = tk.Button(root, text="Remove Line", command=lambda: click(), padx=10, pady=5)
-
-# add_button.grid(row=4, column=0, padx=(81,81), pady=(5,10))
-# update_button.grid(row=4, column=1, padx=(81,81), pady=(5,10))
-# remove_button.grid(row=4, column=2, padx=(81,81), pady=(5,10))
 
 root.mainloop()
