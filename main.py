@@ -41,8 +41,6 @@ HeadingLabel.grid(row=3, column=0, sticky='W', columnspan = 3)
 
 global lineObjs
 lineObjs = []
-global r
-r = 5
 
 class line:
     def __init__(self, line_button, select_dir_button, send_button):
@@ -53,36 +51,27 @@ class line:
 def click():
     return
 
-def add_line_clicked():
-    global r
-    line_button = tk.Button(root, text="Line " + str(r-5+1), command=lambda: click(), padx=10, pady=5)
+
+for i in range(0, 6):
+    line_button = tk.Button(root, text="Line " + str(i+1), command=lambda: click(), padx=10, pady=5)
     select_dir_button = tk.Button(root, text="Select Folder", command=lambda: click(), padx=10, pady=5)
     send_button = tk.Button(root, text="Send", command=lambda: click(), padx=10, pady=5)
 
     temp = line(line_button, select_dir_button, send_button)
     lineObjs.append(temp)
-    print(lineObjs)
 
-    # for i in range(0, len(lineObjs)):
-    print("r is : " + str(r) )
-    print(lineObjs[r-5].line_button)
-    lineObjs[r-5].line_button.grid(row=r, column=0, padx=(81, 81))
-    lineObjs[r-5].select_dir_button.grid(row=r, column=1, padx=(81, 81))
-    lineObjs[r-5].send_button.grid(row=r, column=2, padx=(81 , 81))
-    r+=1
-
-    print("Add line clicked")
-    return
+    lineObjs[i].line_button.grid(row=i+5, column=0, padx=(81, 81), pady=(8,5))
+    lineObjs[i].select_dir_button.grid(row=i+5, column=1, padx=(81, 81), pady=(8,5))
+    lineObjs[i].send_button.grid(row=i+5, column=2, padx=(81 , 81), pady=(8,5))
 
 
+# # ADD, REMOVE, UPDATE BUTTON WIDGETS
+# add_button = tk.Button(root, text="Add Line", command=lambda: add_line_clicked(), padx=10, pady=(5))
+# update_button = tk.Button(root, text="Update Line", command=lambda: click(), padx=10, pady=5)
+# remove_button = tk.Button(root, text="Remove Line", command=lambda: click(), padx=10, pady=5)
 
-# ADD, REMOVE, UPDATE BUTTON WIDGETS
-add_button = tk.Button(root, text="Add Line", command=lambda: add_line_clicked(), padx=10, pady=(5))
-update_button = tk.Button(root, text="Update Line", command=lambda: click(), padx=10, pady=5)
-remove_button = tk.Button(root, text="Remove Line", command=lambda: click(), padx=10, pady=5)
-
-add_button.grid(row=4, column=0, padx=(81,81), pady=(5,10))
-update_button.grid(row=4, column=1, padx=(81,81), pady=(5,10))
-remove_button.grid(row=4, column=2, padx=(81,81), pady=(5,10))
+# add_button.grid(row=4, column=0, padx=(81,81), pady=(5,10))
+# update_button.grid(row=4, column=1, padx=(81,81), pady=(5,10))
+# remove_button.grid(row=4, column=2, padx=(81,81), pady=(5,10))
 
 root.mainloop()
