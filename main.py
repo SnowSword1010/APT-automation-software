@@ -3,6 +3,9 @@ import tkinter.font
 from PIL import Image, ImageTk
 import tkinter.filedialog
 
+# custom functions import
+import open_folder
+
 root = tk.Tk()
 
 root.title("APT Electronics AutoConfig")
@@ -47,42 +50,36 @@ lineObjs = []
 class line:
 
     # instance variables => {browse_text, line_button, select_dir_button, send_button}
-    def __init__(self):
+    def __init__(self, line_no):
 
         # variable that stores the state of our select folder button
         self.browse_text = tk.StringVar()
-
-        # function used to update the text of select folder button ; also used to get the store the selected directory path
-        def open_folder():
-            folder_selected = tkinter.filedialog.askdirectory()
-            print(folder_selected)
-            if(folder_selected == ()):
-                self.browse_text.set("Select Folder")
-            else:
-                arr = folder_selected.split('/')
-                text = arr[len(arr) - 1]
-                text = (text[:10] + '...') if len(text) > 13 else text
-                self.browse_text.set(text)
-            return
+        self.folder = tk.StringVar()
 
         # line_button => gives info pertaining to a line
-        self.line_button = tk.Button(root, text="Line " + str(i+1), command=lambda: click(), padx=10, pady=5)
+        self.line_button = tk.Button(root, text="Line " + str(line_no+1), command=lambda: click(), padx=10, pady=5)
 
-        # select_dir button => adding browse functionality
-        self.select_dir_button = tk.Button(root, textvariable=self.browse_text, command=lambda: open_folder(), padx=10, pady=5)
+
+        # select_dir button => adds browse folder functionality
+        self.select_dir_button = tk.Button(root, textvariable=self.browse_text, command=lambda: open_folder.open_folder(lineObjs, line_no, self.browse_text, self.folder), padx=10, pady=5)
         self.browse_text.set("Select Folder")
+        self.folder.set("")
 
+        def send():
+            print(self.folder.get())
 
-        self.send_button = tk.Button(root, text="Send", command=lambda: click(), padx=10, pady=5)
+        # send_button => sends specific files in the selected folder to specific destinations
+        self.send_button = tk.Button(root, text="Send", command=lambda: send(), padx=10, pady=5)
 
 def click():
+    print("I was clicked")
     return
 
 for i in range(0, 6):
-    temp = line()
+    temp = line(i)
     lineObjs.append(temp)
     lineObjs[i].line_button.grid(row=i+5, column=0, padx=(81, 81), pady=(8,5))
     lineObjs[i].select_dir_button.grid(row=i+5, column=1, padx=(81, 81), pady=(8,5))
-    lineObjs[i].send_button.grid(row=i+5, column=2, padx=(81 , 81), pady=(8,5))
+    lineObjs[i].send_button.grid(row=i+5, column=2, padx=(81, 81), pady=(8,5))
 
 root.mainloop()
