@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 import tkinter.filedialog
 
 # custom functions import
+import view_line
 import open_folder
 
 root = tk.Tk()
@@ -57,7 +58,7 @@ class line:
         self.folder = tk.StringVar()
 
         # line_button => gives info pertaining to a line
-        self.line_button = tk.Button(root, text="Line " + str(line_no+1), command=lambda: click(), padx=10, pady=5)
+        self.line_button = tk.Button(root, text="Line " + str(line_no+1), command=lambda: view_line.view(lineObjs, line_no), padx=10, pady=5)
 
 
         # select_dir button => adds browse folder functionality
