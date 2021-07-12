@@ -7,6 +7,52 @@ import tkinter.filedialog
 import view_line
 import open_folder
 
+# DUMMY IP ADDRESSES
+ip_address_table = {
+    "line1" : {
+        "1" : "192.168.2.3",
+        "2" : "192.168.2.4",
+        "3" : "192.168.2.5",
+        "4" : "192.168.2.6",
+        "5" : "192.168.2.7",
+        "6" : "192.168.2.8",
+        "7" : "192.168.2.9",
+        "8" : "192.168.2.10",
+        "9" : "192.168.2.11",
+        "10" : "192.168.2.12",
+        "11" : "192.168.2.13",
+        "12" : "192.168.2.14"
+    },
+    "line2" : {
+        "1" : "192.168.2.3",
+        "2" : "192.168.2.3",
+        "3" : "192.168.2.3",
+        "4" : "192.168.2.3",
+        "5" : "192.168.2.3",
+        "6" : "192.168.2.3",
+        "7" : "192.168.2.3",
+        "8" : "192.168.2.3",
+        "9" : "192.168.2.3",
+        "10" : "192.168.2.3",
+        "11" : "192.168.2.3",
+        "12" : "192.168.2.3"
+    },
+    "line3" : {
+        "1" : "192.168.2.3",
+        "2" : "192.168.2.3",
+        "3" : "192.168.2.3",
+        "4" : "192.168.2.3",
+        "5" : "192.168.2.3",
+        "6" : "192.168.2.3",
+        "7" : "192.168.2.3",
+        "8" : "192.168.2.3",
+        "9" : "192.168.2.3",
+        "10" : "192.168.2.3",
+        "11" : "192.168.2.3",
+        "12" : "192.168.2.3"
+    }
+}
+
 root = tk.Tk()
 
 root.title("APT Electronics AutoConfig")
@@ -58,7 +104,7 @@ class line:
         self.folder = tk.StringVar()
 
         # line_button => gives info pertaining to a line
-        self.line_button = tk.Button(root, text="Line " + str(line_no+1), command=lambda: view_line.view(lineObjs, line_no), padx=10, pady=5)
+        self.line_button = tk.Button(root, text="Line " + str(line_no+1), command=lambda: view_line.view(lineObjs, line_no, ip_address_table), padx=10, pady=5)
 
 
         # select_dir button => adds browse folder functionality
@@ -76,7 +122,7 @@ def click():
     print("I was clicked")
     return
 
-for i in range(0, 6):
+for i in range(0, 3):
     temp = line(i)
     lineObjs.append(temp)
     lineObjs[i].line_button.grid(row=i+5, column=0, padx=(81, 81), pady=(8,5))
