@@ -31,4 +31,4 @@ Master PC software for display automation for APT Electronics Pvt Ltd.
 <img src = "https://user-images.githubusercontent.com/55655727/130039222-0b93eb43-2c79-47ad-9ae7-8be54d4349f2.png"></img>
 
 Select the directory of images required for the specific production line and Click on send.
-The software would network with the Raspberry Pi's of the specified IP address and would send their respective documents via the TCP/IP protocol.
+The software would communicate with the Raspberry Pis of the specified IP address and would automatically send documents relevant to them via the TCP/IP protocol.
