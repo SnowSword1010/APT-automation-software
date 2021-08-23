@@ -21,10 +21,9 @@ Master PC software for display automation for APT Electronics Pvt Ltd.
   pip install -r requirements.txt
 ```
 6. Run the software
-<!-- Code Block -->
-```
-  python main,py
- ```
+
+    * **On Windows:** ```python main.py```
+    * **On Linux:** ```python3 main.py```
 
 ## **About the software**
 
