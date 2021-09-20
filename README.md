@@ -36,7 +36,7 @@ The software would communicate with the Raspberry Pis of the specified IP addres
 
 <p>The idea of the setup is to have servers run in Raspi's background that will listen to incoming requests from the Master PC. The communication is established using python sockets and the communication protocol is TCP to maintain reliable data transfer.</p>
 
-<p>Assuming we are working with a fresh out-of-the box raspberry pi, here are some instructions to configure it</p>
+<p>Assuming we are working with a fresh out-of-the box Raspberry Pi Zero W, here are some instructions to configure it</p>
 
 <!-- OL -->
 0. (Optional) For setting up Raspberry Pi Zero W on VGA displays, <a href = "https://www.youtube.com/watch?v=7WbMGzet7fg">this</a> video might be helpful.
@@ -58,7 +58,7 @@ The software would communicate with the Raspberry Pis of the specified IP addres
   ```bash
     sudo firewall-cmd --state
   ```
-  
+
 2. Disable iptables rules
 <!-- Code Block -->
   ```bash
