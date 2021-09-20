@@ -58,11 +58,7 @@ The software would communicate with the Raspberry Pis of the specified IP addres
   ```bash
     sudo firewall-cmd --state
   ```
-  - Temporarily stop firewall
-  <!-- Code Block -->
-  ```bash
-    sudo systemctl stop firewalld
-  ```
+  
 2. Disable iptables rules
 <!-- Code Block -->
   ```bash
