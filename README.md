@@ -31,3 +31,40 @@ Master PC software for display automation for APT Electronics Pvt Ltd.
 
 Select the directory of images required for the specific production line and Click on send.
 The software would communicate with the Raspberry Pis of the specified IP address and would automatically send documents relevant to them via the TCP/IP protocol.
+
+## **Raspi Zero W configuration guidelines**
+
+<p>The idea of the setup is to have servers run in Raspi's background that will listen to incoming requests from the Master PC. The communication is established using python sockets and the communication protocol is TCP to maintain reliable data transfer.</p>
+
+<p>Assuming we are working with a fresh out-of-the box raspberry pi, here are some instructions to configure it</p>
+
+<!-- OL -->
+0. (Optional) For setting up Raspberry Pi Zero W on VGA displays, <a href = "https://www.youtube.com/watch?v=7WbMGzet7fg">this</a> video might be helpful.
+1. Disable the firewall permanently
+<!-- UL -->
+  - Temporarily stop firewall
+  <!-- Code Block -->
+  ```bash
+    sudo systemctl stop firewalld
+  ```
+  - Disable the firewall service at boot time
+  <!-- Code Block -->
+  ```bash
+    sudo systemctl disable firewalld
+    sudo systemctl mask --now firewalld
+  ```
+  - Check status of your firewall (recommended to reboot the system)
+  <!-- Code Block -->
+  ```bash
+    sudo firewall-cmd --state
+  ```
+  - Temporarily stop firewall
+  <!-- Code Block -->
+  ```bash
+    sudo systemctl stop firewalld
+  ```
+2. Disable iptables rules
+<!-- Code Block -->
+  ```bash
+    iptables -F
+  ```
