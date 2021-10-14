@@ -6,11 +6,12 @@ import tkinter.filedialog
 # custom functions import
 import view_line
 import open_folder
+import send_folder
 
-# DUMMY IP ADDRESSES
+# IP ADDRESSES OF RASPBERRY PIs
 ip_address_table = {
     "line1" : {
-        "1" : "192.168.2.3",
+        "1" : "192.168.29.222",
         "2" : "192.168.2.4",
         "3" : "192.168.2.5",
         "4" : "192.168.2.6",
@@ -21,7 +22,8 @@ ip_address_table = {
         "9" : "192.168.2.11",
         "10" : "192.168.2.12",
         "11" : "192.168.2.13",
-        "12" : "192.168.2.14"
+        "12" : "192.168.2.14",
+        "13" : "192.168.2.3"
     },
     "line2" : {
         "1" : "192.168.2.3",
@@ -35,7 +37,8 @@ ip_address_table = {
         "9" : "192.168.2.3",
         "10" : "192.168.2.3",
         "11" : "192.168.2.3",
-        "12" : "192.168.2.3"
+        "12" : "192.168.2.3",
+        "13" : "192.168.2.3"
     },
     "line3" : {
         "1" : "192.168.2.3",
@@ -49,7 +52,8 @@ ip_address_table = {
         "9" : "192.168.2.3",
         "10" : "192.168.2.3",
         "11" : "192.168.2.3",
-        "12" : "192.168.2.3"
+        "12" : "192.168.2.3",
+        "13" : "192.168.2.3"
     }
 }
 
@@ -63,11 +67,11 @@ root.title("APT Electronics AutoConfig")
 
 
 # LOGO WIDGET
-# converting our image to pillow image
+# converting our logo to pillow image
 logo = Image.open('./images/logo.png')
-# converting our pillow image to Tkinter image
+# converting our pillow image (logo) to Tkinter image
 logo = ImageTk.PhotoImage(logo)
-# putting our Tkinter image into a widget
+# putting our Tkinter image (logo) into a widget
 logo_label = tk.Label(image=logo)
 # critical line ; can't be skipped
 logo_label.image = logo
@@ -90,7 +94,7 @@ HeadingText = "Configure Lines"
 HeadingLabel = tk.Label(root, text = HeadingText, font=HeadingFont, justify="left")
 HeadingLabel.grid(row=3, column=0, sticky='W', columnspan = 3)
 
-# each element represents line buttons (line, select folder, send)
+# each element of lineObjs represents line buttons (line, select folder, send)
 global lineObjs
 lineObjs = []
 
@@ -112,11 +116,8 @@ class line:
         self.browse_text.set("Select Folder")
         self.folder.set("")
 
-        def send():
-            print(self.folder.get())
-
         # send_button => sends specific files in the selected folder to specific destinations
-        self.send_button = tk.Button(root, text="Send", command=lambda: send(), padx=10, pady=5)
+        self.send_button = tk.Button(root, text="Send", command=lambda: send_folder.send_folder(self.folder.get(), ip_address_table["line"+str(line_no+1)]), padx=10, pady=5)
 
 def click():
     print("I was clicked")
@@ -124,7 +125,7 @@ def click():
 
 for i in range(0, 3):
     temp = line(i)
-    lineObjs.append(temp)
+    lineObjs.append(temp) 
     lineObjs[i].line_button.grid(row=i+5, column=0, padx=(81, 81), pady=(8,5))
     lineObjs[i].select_dir_button.grid(row=i+5, column=1, padx=(81, 81), pady=(8,5))
     lineObjs[i].send_button.grid(row=i+5, column=2, padx=(81, 81), pady=(8,5))
