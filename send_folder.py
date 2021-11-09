@@ -3,19 +3,7 @@ from glob import glob
 from os.path import join
 import socket
 import time
-# import signal
 
-def handler(signum, frame):
-    raise Exception("end of time")
-
-# def countdown():
-#     global my_timer
-#     my_timer = 20
-#     for x in range(20):
-#         my_timer = my_timer-1
-#         time.sleep(1)
-    
-#     print("Out of time")
 
 def send_im(ip, im1, im2):
     SEPARATOR = "<SEPARATOR>"
@@ -33,65 +21,51 @@ def send_im(ip, im1, im2):
     filesize2 = os.path.getsize(filename2)
 
     shutdown = False
-    twoImage = True
     s = socket.socket()
     print(f"[+] Connecting to {host}:{port}")
     try:
-        # signal.signal(signal.SIGALRM, handler)
-        # signal.alarm(20)
         s.settimeout(15)
         s.connect((host, port))
         s.settimeout(None)
-        # except Exception as exc:
-        #     print(exc)
-            # s.close()
-            # return
 
         print("[+] Connected.")
         time.sleep(10)
         # send the filename1 and filesize
-        s.send(f"{shutdown}{SEPARATOR}{twoImage}{SEPARATOR}{filename1}{SEPARATOR}{filesize1}{SEPARATOR}{filename2}{SEPARATOR}{filesize2}".encode("utf-16"))
+        s.send(f"{shutdown}{SEPARATOR}{filename1}{SEPARATOR}{filesize1}{SEPARATOR}{filename2}{SEPARATOR}{filesize2}".encode("utf-16"))
         print("Sent stuff")
 
         time.sleep(4)
 
-        recMsg = s.recv(1024)
+        recMsg = s.recv(BUFFER_SIZE)
         print(recMsg)
 
         print(filename1)
         with open(filename1, "rb") as f1:
             while True:
-                bytes_read = f1.read(1024)
+                bytes_read = f1.read(BUFFER_SIZE)
                 if not bytes_read:
                     break
                 s.send(bytes_read)
-        # i1 = open(filename1, "rb")
-        # for k in i1:
-        #     s.send(k)
         
         time.sleep(4)
         s.send(b'n')
 
         print("blah")
-        recMsg = s.recv(1024)
+        recMsg = s.recv(BUFFER_SIZE)
         print(recMsg)
 
         print(filename2)
         with open(filename2, "rb") as f2:
             while True:
-                bytes_read = f2.read(1024)
+                bytes_read = f2.read(BUFFER_SIZE)
                 if not bytes_read:
                     break
                 s.send(bytes_read)
-
-        # i2 = open(filename2, "rb")
-        # for k in i2:
-        #     s.send(k)
         
         time.sleep(4)
         s.send(b'nex')
         print("hey")
-        recMsg = s.recv(1024)
+        recMsg = s.recv(BUFFER_SIZE)
         print(recMsg)
 
     finally:
