@@ -117,6 +117,7 @@ class line:
         self.folder.set("")
 
         # send_button => sends specific files in the selected folder to specific destinations
+        
         self.send_button = tk.Button(root, text="Send", command=lambda: send_folder.send_folder(self.folder.get(), ip_address_table["line"+str(line_no+1)]), padx=10, pady=5)
 
 def click():
