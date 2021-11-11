@@ -1,51 +1,34 @@
-import socket
-import tqdm
-import os
+import send_im
+import tkinter
 
 
-def send(file, ip):
+def send_file(ip, filename1, filename2, monitor_no):
+    print(monitor_no)
     print(ip)
-    SEPARATOR = "<SEPARATOR>"
-    BUFFER_SIZE = 4096  # send 4096 bytes each time step
+    print(filename1)
+    print(filename2)
 
-    # the ip address or hostname of the server, the receiver
-    host = ip
-    # the port, let's use 5001
-    port = 5001
-    # the name of file we want to send, make sure it exists
-    filename = file
-    # get the file size
-    filesize = os.path.getsize(filename)
-    print("File size: " + str(filesize))
+    message = tkinter.StringVar()
+    message.set("")
 
-    # create the client socket
-    s = socket.socket()
+    success = tkinter.StringVar()
+    success.set("")
+    
+    failure = tkinter.StringVar()
+    failure.set("")
 
-    print(f"[+] Connecting to {host}:{port}")
-    try:
-        s.connect((host, port))
-        print("[+] Connected.")
+    if(filename1 == "" or filename2 == ""):
+        message.set("Kindly select both File 1 and File 2.\nIf case you want only one image to be displayed on the monitor, select the same image in both File 1 and File 2. Otherwise select distinct images.")
+    else:
+        send_im.send_im(ip, filename1, filename2, monitor_no, success, failure)
+        if(success.get() != ""):
+            message.set("Connection established.\nGiven images have been displayed on monitor")
+        else:
+            message.set("Connection could not be established.\nGiven images could not be displayed on monitor")
+    
+    tkinter.messagebox.showinfo("Status", message.get())
+    
 
-        # send the filename and filesize
-        s.send(f"{filename}{SEPARATOR}{filesize}".encode())
 
-        # start sending the file
-        progress = tqdm.tqdm(range(
-            filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-        with open(filename, "rb") as f:
-            while True:
-                # read the bytes from the file
-                bytes_read = f.read(BUFFER_SIZE)
-                if not bytes_read:
-                    # file transmitting is done
-                    break
-                # we use sendall to assure transimission in
-                # busy networks
-                s.sendall(bytes_read)
-                # update the progress bar
-                progress.update(len(bytes_read))
-                
-    finally:
-        # close the socket
-        print("Closing connection.")
-        s.close()
+
+    

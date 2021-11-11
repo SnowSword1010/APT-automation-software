@@ -110,5 +110,5 @@ def send_im(ip, filename1, filename2, monitor_no, connected, failed):
 
     finally:
         # for debugging
-        # print("Closing connection.")
+        print("Closing connection.")
         s.close()
