@@ -3,9 +3,14 @@ from glob import glob
 from os.path import join
 import socket
 import time
+import tkinter
 
+connected = "Monitors successfully connected: "
+failed = "Monitors not successfully connected: "
 
-def send_im(ip, im1, im2):
+def send_im(ip, im1, im2, monitor_no):
+    global connected
+    global failed
     SEPARATOR = "<SEPARATOR>"
     BUFFER_SIZE = 1024 # send 1024 bytes each time step
     host = str(ip)
@@ -67,12 +72,18 @@ def send_im(ip, im1, im2):
         print("hey")
         recMsg = s.recv(BUFFER_SIZE)
         print(recMsg)
+        connected += str(monitor_no) + " "
+
+    except:
+        failed += str(monitor_no) + " "
+        pass
 
     finally:
         print("Closing connection.")
         s.close()
 
 def send_folder(folderPath, monitorDictionary):
+    
     print(folderPath)
     # lists all files in the chosen directory
     allFiles = os.listdir(folderPath)
@@ -83,9 +94,9 @@ def send_folder(folderPath, monitorDictionary):
         images.extend(glob(join(folderPath, ext)))
 
     if(len(images) == 0):
-        print("Selected folder should have atleast one PNG, JPG or JPEG image")
+        tkinter.messagebox.showinfo("Error","Selected folder should have atleast one PNG, JPG or JPEG image.")
     elif(len(images) != len(allFiles)):
-        print("Make sure all the files in the chosen folder end with .png / .jpg / .jpeg")
+        tkinter.messagebox.showinfo("Error","Make sure all the files in the chosen folder end with .png (or) .jpg (or) .jpeg\nNote even if all the extensions are the same as specified, ensure that the file name also ends with the extension.\nExample: 'image_no.png (2)' will not work")
     else:
         n = len(images) # denotes number of images
         m = len(monitorDictionary) # denotes number of monitors
@@ -111,7 +122,7 @@ def send_folder(folderPath, monitorDictionary):
                 break
             else:
                 try:
-                    send_im(monitorDictionary[str(monitor_no)], folderPath + "/" + allFiles[counter], folderPath + "/" + allFiles[counter+1])
+                    send_im(monitorDictionary[str(monitor_no)], folderPath + "/" + allFiles[counter], folderPath + "/" + allFiles[counter+1], monitor_no)
                 except:
                     pass
 
@@ -123,10 +134,11 @@ def send_folder(folderPath, monitorDictionary):
                 break
             else:
                 try:
-                    send_im(monitorDictionary[str(monitor_no)], folderPath + "/" +  allFiles[counter], folderPath + "/" + allFiles[counter])
+                    send_im(monitorDictionary[str(monitor_no)], folderPath + "/" +  allFiles[counter], folderPath + "/" + allFiles[counter], monitor_no)
                 except:
                     pass
                 counter+=1
-            
+
+        tkinter.messagebox.showinfo("Connection Status", connected + "\n" + failed)
         print(n1)
         print(n2)
