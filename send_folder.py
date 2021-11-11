@@ -4,7 +4,8 @@ from os.path import join
 import send_im
 import tkinter
 
-# function used to send specific files in the selected folder to specific monitors on the current production line
+# send_folder() function => used to send specific files in the selected folder to specific 
+# monitors on the current production line
 # parameter 1 => folder_path => stores the folder_path from which images are to be sent
 # parameter 2 => monitorDictionary => copy of ip_address_table of chosen production line
 def send_folder(folderPath, monitorDictionary):

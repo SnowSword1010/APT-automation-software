@@ -1,8 +1,6 @@
 import shut_monitor
 import tkinter
 
-
-
 # function to shutdown all monitors of the chosen
 # production line
 # parameter1 = ips = denotes a dictionary of all

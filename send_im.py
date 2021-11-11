@@ -2,8 +2,15 @@ import time
 import os
 import socket
 
+# send_im() function => does the heavylifting of sending filename1 (name of image 1)
+# and filename2 (name of image 2) to the chosen monitor
+# parameter 1 => ip => denotes ip address of chosen monitor
+# parameter 2 => filename1 => denotes name of image 1
+# parameter 3 => filename2 => denotes name of image 2
+# parameter 4 => monitor_no => denoted monitor number of chosen monitor on the current production line
+# parameter 5 => connected => tkinter variable updated when connection with monitor is successful
+# parameter 6 => failed => tkinter variable updated when connection with monitor is unsuccessful
 def send_im(ip, filename1, filename2, monitor_no, connected, failed):
-
     # used to separate different parameters received from socket stream
     SEPARATOR = "<SEPARATOR>"
     # send/receive 1024 bytes each time
@@ -26,7 +33,7 @@ def send_im(ip, filename1, filename2, monitor_no, connected, failed):
     try:
         # The program has 15 seconds to establish connection
         # with the monitor. It'll timeout after that.
-        s.settimeout(1)
+        s.settimeout(15)
         s.connect((host, port))
         # If the connection is established, then the timout
         # must be removed as different image sizes may have

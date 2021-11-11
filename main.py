@@ -3,7 +3,7 @@ import tkinter.font
 from PIL import Image, ImageTk
 import tkinter.filedialog
 
-# custom functions import
+# custom modules import
 import view_line
 import open_folder
 import send_folder
