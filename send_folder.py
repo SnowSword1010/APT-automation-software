@@ -1,108 +1,69 @@
 import os
 from glob import glob
 from os.path import join
-import socket
-import time
+import send_im
 import tkinter
 
-connected = "Monitors successfully connected: "
-failed = "Monitors not successfully connected: "
-
-def send_im(ip, im1, im2, monitor_no):
-    global connected
-    global failed
-    SEPARATOR = "<SEPARATOR>"
-    BUFFER_SIZE = 1024 # send 1024 bytes each time step
-    host = str(ip)
-    port = 5002
-
-    filename1 = im1
-    filename2 = im2
-
-    print("filename1: " + str(filename1))
-    print("filename1: " + str(filename2))
-
-    filesize1 = os.path.getsize(filename1)
-    filesize2 = os.path.getsize(filename2)
-
-    shutdown = False
-    s = socket.socket()
-    print(f"[+] Connecting to {host}:{port}")
-    try:
-        s.settimeout(15)
-        s.connect((host, port))
-        s.settimeout(None)
-
-        print("[+] Connected.")
-        time.sleep(10)
-        # send the filename1 and filesize
-        s.send(f"{shutdown}{SEPARATOR}{filename1}{SEPARATOR}{filesize1}{SEPARATOR}{filename2}{SEPARATOR}{filesize2}".encode("utf-16"))
-        print("Sent stuff")
-
-        time.sleep(4)
-
-        recMsg = s.recv(BUFFER_SIZE)
-        print(recMsg)
-
-        print(filename1)
-        with open(filename1, "rb") as f1:
-            while True:
-                bytes_read = f1.read(BUFFER_SIZE)
-                if not bytes_read:
-                    break
-                s.send(bytes_read)
-        
-        time.sleep(4)
-        s.send(b'n')
-
-        print("blah")
-        recMsg = s.recv(BUFFER_SIZE)
-        print(recMsg)
-
-        print(filename2)
-        with open(filename2, "rb") as f2:
-            while True:
-                bytes_read = f2.read(BUFFER_SIZE)
-                if not bytes_read:
-                    break
-                s.send(bytes_read)
-        
-        time.sleep(4)
-        s.send(b'nex')
-        print("hey")
-        recMsg = s.recv(BUFFER_SIZE)
-        print(recMsg)
-        connected += str(monitor_no) + " "
-
-    except:
-        failed += str(monitor_no) + " "
-        pass
-
-    finally:
-        print("Closing connection.")
-        s.close()
-
+# function used to send specific files in the selected folder to specific monitors on the current production line
+# parameter 1 => folder_path => stores the folder_path from which images are to be sent
+# parameter 2 => monitorDictionary => copy of ip_address_table of chosen production line
 def send_folder(folderPath, monitorDictionary):
-    
-    print(folderPath)
-    # lists all files in the chosen directory
+
+    # tkinter variable that stores the monitor numbers with which
+    # the software could successfully establish socket connection
+    connected = tkinter.StringVar()
+    # initial value of connected
+    connected.set("Monitors successfully connected: ")
+    # tkinter variable that stores the monitor numbers with which
+    # the software couldn't successfully establish socket connection
+    failed = tkinter.StringVar()
+    # initial value of failed
+    failed.set("Monitors not successfully connected: ")
+
+    # allFiles is an array that stores all the files in the chosen folder
     allFiles = os.listdir(folderPath)
+    # sorting the files
     allFiles.sort()
-    # array that stores image files address only
+    
+    # array that only stores image file addresses from the chosen folder
+    # it is due to this array that we can apply checks on extensions of images present in the folder
     images = []
+    # only JPEG/JPG and PNG extensions available for use
     for ext in ('*.jpeg', '*.png', '*.jpg'):
+        # pushes the images with appropriate extensions inside the images array
         images.extend(glob(join(folderPath, ext)))
 
+    # len(images) == 0  means that the folder is empty
     if(len(images) == 0):
         tkinter.messagebox.showinfo("Error","Selected folder should have atleast one PNG, JPG or JPEG image.")
+    # len(images) != len(allFiles) indicates that the folder despite containing images with appropriate extensions also some other files
+    # such folders are not selected for the efficiency of the algorithm
     elif(len(images) != len(allFiles)):
         tkinter.messagebox.showinfo("Error","Make sure all the files in the chosen folder end with .png (or) .jpg (or) .jpeg\nNote even if all the extensions are the same as specified, ensure that the file name also ends with the extension.\nExample: 'image_no.png (2)' will not work")
+    # if the above two cases are not match then the system would prepare to establish connections with the monitors on the chosen line
     else:
-        n = len(images) # denotes number of images
-        m = len(monitorDictionary) # denotes number of monitors
-        
-        print(images)
-        print(monitorDictionary)
+
+        ###################### DECISION MAKING ALGORITHM ######################
+        # 1. Calculate total no of images to send (n) and total no of monitors (m)
+        # 2. It is assumed that all monitors would display two images with a specified lag - 
+        # some would display two different images while others would display the same image twice
+        # n1 = monitors with different displays
+        # n2 = monitors with duplicate displays
+        # 3. Calculate n-m
+        # 4. if n-m > 0:
+        #       n1 = n-m ; n2 = m
+        #    else:
+        #       n1 = 0 ; n2 = n
+        # 5. Loop over monitors with multiple displays and call the send_im function giving
+        #    ip_address, image_address_1 and image_address_2 as 3 parameters
+        # 6. Loop over monitors with single displays and call the send_im function giving 
+        #    the ip_address and image_address twice as 3 parameters
+        #######################################################################
+
+        # denotes number of images
+        n = len(images)
+        # denotes number of monitors
+        m = len(monitorDictionary)
 
         if(n-m > 0):
             # n1 monitors will have multiple displays
@@ -114,7 +75,7 @@ def send_folder(folderPath, monitorDictionary):
             n1 = 0
             n2 = n
         
-        print(allFiles)
+        # counter is pointer to the index of the image to be sent
         counter = 0
         for i in range(0, n1):
             monitor_no = i+1
@@ -122,10 +83,10 @@ def send_folder(folderPath, monitorDictionary):
                 break
             else:
                 try:
-                    send_im(monitorDictionary[str(monitor_no)], folderPath + "/" + allFiles[counter], folderPath + "/" + allFiles[counter+1], monitor_no)
+                    send_im.send_im(monitorDictionary[str(monitor_no)], folderPath + "/" + allFiles[counter], folderPath + "/" + allFiles[counter+1], monitor_no, connected, failed)
                 except:
                     pass
-
+                # counter is incremented by 2 because two distinct images are being sent
                 counter+=2
             
         for i in range(n1, n):
@@ -134,11 +95,12 @@ def send_folder(folderPath, monitorDictionary):
                 break
             else:
                 try:
-                    send_im(monitorDictionary[str(monitor_no)], folderPath + "/" +  allFiles[counter], folderPath + "/" + allFiles[counter], monitor_no)
+                    send_im.send_im(monitorDictionary[str(monitor_no)], folderPath + "/" +  allFiles[counter], folderPath + "/" + allFiles[counter], monitor_no, connected, failed)
                 except:
                     pass
+                # counter is incremented by 1 because only one distinct image is being sent
                 counter+=1
 
-        tkinter.messagebox.showinfo("Connection Status", connected + "\n" + failed)
-        print(n1)
-        print(n2)
+        # displays a message box mentioning monitor_numbers that were successfully
+        # and unsuccessfully connected
+        tkinter.messagebox.showinfo("Connection Status", connected.get() + "\n" + failed.get())

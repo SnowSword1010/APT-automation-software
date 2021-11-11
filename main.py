@@ -58,13 +58,10 @@ ip_address_table = {
     }
 }
 
+# Creation of root window
 root = tk.Tk()
-
+# Setting the title of root window
 root.title("APT Electronics AutoConfig")
-# sets the initial size of root window
-# canvas = tk.Canvas(root, width=650, height=900)
-# initialises the canvas (spans it into 3 invisible columns)
-# canvas.grid()
 
 
 # LOGO WIDGET
@@ -76,6 +73,7 @@ logo = ImageTk.PhotoImage(logo)
 logo_label = tk.Label(image=logo)
 # critical line ; can't be skipped
 logo_label.image = logo
+# positioning the logo in grid
 logo_label.grid(column=0, row=0, columnspan=4)
 
 # SUBTITLE WIDGET
@@ -96,6 +94,7 @@ HeadingLabel = tk.Label(root, text = HeadingText, font=HeadingFont, justify="lef
 HeadingLabel.grid(row=3, column=0, sticky='W', columnspan = 4)
 
 # each element of lineObjs represents line buttons (line, select folder, send)
+# this variable is useful when passing line button details to other modules
 global lineObjs
 lineObjs = []
 
@@ -106,27 +105,28 @@ class line:
 
         # variable that stores the state of our select folder button
         self.browse_text = tk.StringVar()
+        # folder variable stores the path address of the chosen folder
         self.folder = tk.StringVar()
 
         # line_button => gives info pertaining to a line
         self.line_button = tk.Button(root, text="Line " + str(line_no+1), command=lambda: view_line.view(lineObjs, line_no, ip_address_table), padx=10, pady=5)
 
 
-        # select_dir button => adds browse folder functionality
-        self.select_dir_button = tk.Button(root, textvariable=self.browse_text, command=lambda: open_folder.open_folder(lineObjs, line_no, self.browse_text, self.folder), padx=10, pady=5)
+        # select_dir button => adds browse folder functionality ; updates folder variable to store the path address of chosen folder
+        self.select_dir_button = tk.Button(root, textvariable=self.browse_text, command=lambda: open_folder.open_folder(self.browse_text, self.folder), padx=10, pady=5)
+        # initial value of browse_folder variable
         self.browse_text.set("Select Folder")
+        # initial value of set folder varible
         self.folder.set("")
 
-        # send_button => sends specific files in the selected folder to specific destinations
+        # send_button => sends specific files in the selected folder to specific monitors on the current production line
         self.send_button = tk.Button(root, text="Send", command=lambda: send_folder.send_folder(self.folder.get(), ip_address_table["line"+str(line_no+1)]), padx=10, pady=5)
 
         # shutdown_button => shuts down all the monitors on the given line
         self.shutdown_button = tk.Button(root, text="Shutdown all monitors", command=lambda: shutdown_all.shutdown_all(ip_address_table["line"+str(line_no+1)]), padx=10, pady=5)
 
-def click():
-    print("I was clicked")
-    return
-
+# Since the max number of production lines is 3, this loop iterates thrice creating line_button, select_folder_button, 
+# send_button and shutdown_button for every line
 for i in range(0, 3):
     temp = line(i)
     lineObjs.append(temp) 
