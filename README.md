@@ -16,10 +16,14 @@ Master PC software for display automation for APT Electronics Pvt Ltd.
   source venv/bin/activate
 ```
 5. Install the dependencies mentioned in requirments.txt file
-<!-- Code Block -->
-```bash
-  pip install -r requirements.txt
-```
+   * **On Windows:**  
+   ```bash
+   pip install -r requirements.txt
+   ```
+   * **On Linux:**  
+   ```bash
+   pip3 install -r requirements.txt
+   ```
 6. Run the software
 
     * **On Windows:** ```python main.py```
@@ -27,10 +31,14 @@ Master PC software for display automation for APT Electronics Pvt Ltd.
 
 ## **About the software**
 
-<img src = "https://user-images.githubusercontent.com/55655727/130039222-0b93eb43-2c79-47ad-9ae7-8be54d4349f2.png"></img>
+<img src = "https://user-images.githubusercontent.com/55655727/141419362-6f3023ff-bd64-440b-a1aa-4b197ea9b676.png"></img>
 
 Select the directory of images required for the specific production line and Click on send.
 The software would communicate with the Raspberry Pis of the specified IP address and would automatically send documents relevant to them via the TCP/IP protocol.
+
+Individual monitors on Individual lines could also be configured by clicking the Line button above
+
+<img src = "https://user-images.githubusercontent.com/55655727/141419382-c737e7fc-4140-4347-a3ed-25ed76715fbe.png"></img>
 
 ## **Raspi Zero W configuration guidelines**
 
