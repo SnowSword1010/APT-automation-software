@@ -6,7 +6,7 @@ import tkinter
 # parameter 2 => filename1 => File Name 1
 # parameter 3 => filename2 => File Name 2
 # parameter 4 => monitor_no => monitor number to send files to on the current production line
-def send_file(ip, filename1, filename2, monitor_no):
+def send_file(ip, filename1, filename2, monitor_no, top):
 
     # tkinter variable that stores message to be 
     # displayed once the operation is complete
@@ -27,6 +27,14 @@ def send_file(ip, filename1, filename2, monitor_no):
         # Message to be displayed when operation is not valid
         message.set("Kindly select both File 1 and File 2.\nIf case you want only one image to be displayed on the monitor, select the same image in both File 1 and File 2. Otherwise select distinct images.")
     else:
+        progressBar = tkinter.Toplevel(top)
+        progressBar.grab_set()
+        progressBar.geometry('400x100')
+        progressBar.title("Status of connections")
+        tkinter.Label(progressBar, text="The application is running.", font=("Raleway 10 bold italic")).pack()
+        tkinter.Label(progressBar, text="This may take upto a few minutes. Please wait!\n", font=("Raleway 10 bold italic", 10)).pack()
+        tkinter.Label(progressBar, text="\nReaching out to monitor " + str(monitor_no) + " ...", font=("Helvetica 11 bold")).pack()
+        progressBar.update()
         # Sends the given images to the specific monitor
         send_im.send_im(ip, filename1, filename2, monitor_no, success, failure)
         if(success.get() != ""):
@@ -36,6 +44,7 @@ def send_file(ip, filename1, filename2, monitor_no):
             # Message to be displayed when operation is unsuccessful
             message.set("Connection could not be established.\nGiven images could not be displayed on monitor")
     
+        progressBar.destroy()
     # Display message to user
     tkinter.messagebox.showinfo("Status", message.get())
     

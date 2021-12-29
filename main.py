@@ -12,8 +12,8 @@ import shutdown_all
 # IP ADDRESSES OF RASPBERRY PIs
 ip_address_table = {
     "line1" : {
-        "1" : "192.168.29.222",
-        "2" : "192.168.2.4",
+        "1" : "192.168.43.222",
+        "2" : "192.168.43.119",
         "3" : "192.168.2.5",
         "4" : "192.168.2.6",
         "5" : "192.168.2.7",
@@ -120,7 +120,7 @@ class line:
         self.folder.set("")
 
         # send_button => sends specific files in the selected folder to specific monitors on the current production line
-        self.send_button = tk.Button(root, text="Send", command=lambda: send_folder.send_folder(self.folder.get(), ip_address_table["line"+str(line_no+1)]), padx=10, pady=5)
+        self.send_button = tk.Button(root, text="Send", command=lambda: send_folder.send_folder(self.folder.get(), ip_address_table["line"+str(line_no+1)], root), padx=10, pady=5)
 
         # shutdown_button => shuts down all the monitors on the given line
         self.shutdown_button = tk.Button(root, text="Shutdown all monitors", command=lambda: shutdown_all.shutdown_all(ip_address_table["line"+str(line_no+1)]), padx=10, pady=5)

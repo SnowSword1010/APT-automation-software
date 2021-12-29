@@ -1,10 +1,12 @@
 import tkinter.filedialog
+import os
 
 # function used to update the text of select folder button ; also used to get the store the selected directory path in folder variable
 # parameter 1 => browse_text => stores text written on 'select folder' button => type = tk.StringVar => changed using the set method
 # parameter 2 => folder => stores chosen folder path => type = tk.StringVar => changed using the set method
 def open_folder(browse_text, folder):
-    folder_selected = tkinter.filedialog.askdirectory()
+    print(os.getcwd())
+    folder_selected = tkinter.filedialog.askdirectory(initialdir=os.getcwd()+'/APT_Images')
     # if no folder is selected
     if(folder_selected == ()):
         folder.set("")

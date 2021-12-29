@@ -1,5 +1,6 @@
 from tkinter import filedialog
 import tkinter.filedialog
+import os
 
 # open_file() function => 
 # parameter 1 => top => tkinter top level ; on which the entire content specific to production line is rendered
@@ -7,7 +8,7 @@ import tkinter.filedialog
 # parameter 3 => file => stores the state of filename
 def open_file(top, browse_text, file):
     # Only files ending with .PNG, .JPG/.JEPG are allowed to be selected
-    file_selected = tkinter.filedialog.askopenfile(parent=top, mode="rb", title="Choose a file", filetypes=[("Images", "*.png"),("Images", "*.jpg"),("Images", "*.jpeg")])
+    file_selected = tkinter.filedialog.askopenfile(parent=top, mode="rb", title="Choose a file", filetypes=[("Images", "*.png"),("Images", "*.jpg"),("Images", "*.jpeg")], initialdir=os.getcwd()+'/APT_Images')
     # if no file is selected
     if(file_selected == ()):
         file.set("")

@@ -7,7 +7,7 @@ import send_file
 def view(lineObjs, line_no, ip_address_table):
     # Creating a subwindow
     top = tk.Toplevel()
-
+    top.grab_set()
     # LINE NUMBER WIDGET
     HeadingFont = tk.font.Font(family = "Raleway", size = 13, weight="bold")
     HeadingContent = "Line " + str(line_no + 1) + " Configuration"
@@ -51,9 +51,9 @@ def view(lineObjs, line_no, ip_address_table):
             self.browse_file_1_button = tk.Button(top, textvariable=self.browse_file_1_text, command=lambda: browse_file.open_file(top, self.browse_file_1_text, self.file_1), padx=10, pady=5)
             self.browse_file_2_button = tk.Button(top, textvariable=self.browse_file_2_text, command=lambda: browse_file.open_file(top, self.browse_file_2_text, self.file_2), padx=10, pady=5)
             # send_file_button => sends file_1 and file_2 to the selected monitor on the current production line
-            self.send_file_button = tk.Button(top, text="Send File", command=lambda: send_file.send_file(ip_address_table["line"+str(line_no+1)][str(pc_no+1)], self.file_1.get(), self.file_2.get(), str(pc_no+1)), padx=10, pady=5)
+            self.send_file_button = tk.Button(top, text="Send File", command=lambda: send_file.send_file(ip_address_table["line"+str(line_no+1)][str(pc_no+1)], self.file_1.get(), self.file_2.get(), str(pc_no+1), top), padx=10, pady=5)
             # shutdown_button => shut downs the selected monitor on current production line
-            self.shutdown_button = tk.Button(top, text="Shutdown", command=lambda: shut_file.shut_file((ip_address_table["line"+str(line_no+1)])[str(pc_no+1)], str(pc_no+1)), padx=10, pady=5)
+            self.shutdown_button = tk.Button(top, text="Shutdown", command=lambda: shut_file.shut_file((ip_address_table["line"+str(line_no+1)])[str(pc_no+1)], str(pc_no+1), top), padx=10, pady=5)
             return
     
     # iterates over all monitors and initialises the above variables and buttons

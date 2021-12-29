@@ -8,7 +8,7 @@ import tkinter
 # monitors on the current production line
 # parameter 1 => folder_path => stores the folder_path from which images are to be sent
 # parameter 2 => monitorDictionary => copy of ip_address_table of chosen production line
-def send_folder(folderPath, monitorDictionary):
+def send_folder(folderPath, monitorDictionary, root):
 
     # tkinter variable that stores the monitor numbers with which
     # the software could successfully establish socket connection
@@ -65,25 +65,45 @@ def send_folder(folderPath, monitorDictionary):
         n = len(images)
         # denotes number of monitors
         m = len(monitorDictionary)
+        
+        monitors_involved = 0
 
         if(n-m > 0):
             # n1 monitors will have multiple displays
             # n2 monitors will have single display
             n1 = n-m
             n2 = m
+            monitors_involved = 13
         else:
             # all monitors will have single display
             n1 = 0
             n2 = n
-        
+            monitors_involved = n
+
         # counter is pointer to the index of the image to be sent
         counter = 0
+
+        progressBar = tkinter.Toplevel(root)
+        progressBar.grab_set()
+        progressBar.geometry('400x100')
+        progressBar.title("Status of connections")
+        tkinter.Label(progressBar, text="The application is running.", font=("Raleway 10 bold italic")).pack()
+        tkinter.Label(progressBar, text="This may take upto a few minutes. Please wait!\n", font=("Raleway 10 bold italic", 10)).pack()
+        tkinter.Label(progressBar, text="Monitors involved: "+str(monitors_involved), font=("Helvetica 11 bold")).pack()
+        status = tkinter.Label(progressBar, text="Starting ...", font=("Helvetica 11 bold"))
+        status.pack()
+        progressBar.update()
+
         for i in range(0, n1):
             monitor_no = i+1
             if(counter >= n):
                 break
             else:
                 try:
+                    status.pack_forget()
+                    status = tkinter.Label(progressBar, text="Reaching out to monitor " + str(monitor_no) + " ...", font=("Helvetica 11 bold"))
+                    status.pack()
+                    progressBar.update()
                     send_im.send_im(monitorDictionary[str(monitor_no)], folderPath + "/" + allFiles[counter], folderPath + "/" + allFiles[counter+1], monitor_no, connected, failed)
                 except:
                     pass
@@ -96,12 +116,17 @@ def send_folder(folderPath, monitorDictionary):
                 break
             else:
                 try:
+                    status.pack_forget()
+                    status = tkinter.Label(progressBar, text="Reaching out to monitor " + str(monitor_no) + " ...", font=("Helvetica 11 bold"))
+                    status.pack()
+                    progressBar.update()
                     send_im.send_im(monitorDictionary[str(monitor_no)], folderPath + "/" +  allFiles[counter], folderPath + "/" + allFiles[counter], monitor_no, connected, failed)
                 except:
                     pass
                 # counter is incremented by 1 because only one distinct image is being sent
                 counter+=1
 
+        progressBar.destroy()
         # displays a message box mentioning monitor_numbers that were successfully
         # and unsuccessfully connected
-        tkinter.messagebox.showinfo("Connection Status", connected.get() + "\n" + failed.get())
+        tkinter.messagebox.showinfo("Connection Status", "Monitors Involved: " + str(monitors_involved) + "\n\n" + connected.get() + "\n\n" + failed.get())
