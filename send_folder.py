@@ -65,7 +65,7 @@ def send_folder(folderPath, monitorDictionary, root):
         n = len(images)
         # denotes number of monitors
         m = len(monitorDictionary)
-        
+        # denotes the number of monitors involved;
         monitors_involved = 0
 
         if(n-m > 0):
@@ -83,15 +83,19 @@ def send_folder(folderPath, monitorDictionary, root):
         # counter is pointer to the index of the image to be sent
         counter = 0
 
+        # tkinter Toplevel window to show status of connections
         progressBar = tkinter.Toplevel(root)
+        # prevents the users from interacting with any window other than progressBar
         progressBar.grab_set()
         progressBar.geometry('400x100')
         progressBar.title("Status of connections")
+        # Contents of progressBar window
         tkinter.Label(progressBar, text="The application is running.", font=("Raleway 10 bold italic")).pack()
         tkinter.Label(progressBar, text="This may take upto a few minutes. Please wait!\n", font=("Raleway 10 bold italic", 10)).pack()
         tkinter.Label(progressBar, text="Monitors involved: "+str(monitors_involved), font=("Helvetica 11 bold")).pack()
         status = tkinter.Label(progressBar, text="Starting ...", font=("Helvetica 11 bold"))
         status.pack()
+        # this line is critical to render the above tkinter labels properly
         progressBar.update()
 
         for i in range(0, n1):
@@ -100,10 +104,14 @@ def send_folder(folderPath, monitorDictionary, root):
                 break
             else:
                 try:
+                    # removes the last item packed
                     status.pack_forget()
                     status = tkinter.Label(progressBar, text="Reaching out to monitor " + str(monitor_no) + " ...", font=("Helvetica 11 bold"))
+                    # packs the current label
                     status.pack()
+                    # this line is critical to render the currently packed tkinter label properly
                     progressBar.update()
+                    # sending image
                     send_im.send_im(monitorDictionary[str(monitor_no)], folderPath + "/" + allFiles[counter], folderPath + "/" + allFiles[counter+1], monitor_no, connected, failed)
                 except:
                     pass
@@ -116,16 +124,21 @@ def send_folder(folderPath, monitorDictionary, root):
                 break
             else:
                 try:
+                    # removes the last item packed
                     status.pack_forget()
                     status = tkinter.Label(progressBar, text="Reaching out to monitor " + str(monitor_no) + " ...", font=("Helvetica 11 bold"))
+                    # packs the current label
                     status.pack()
+                    # this line is critical to render the currently packed tkinter label properly
                     progressBar.update()
+                    # sending image
                     send_im.send_im(monitorDictionary[str(monitor_no)], folderPath + "/" +  allFiles[counter], folderPath + "/" + allFiles[counter], monitor_no, connected, failed)
                 except:
                     pass
                 # counter is incremented by 1 because only one distinct image is being sent
                 counter+=1
 
+        # destroys progressBar tkinter toplevel
         progressBar.destroy()
         # displays a message box mentioning monitor_numbers that were successfully
         # and unsuccessfully connected

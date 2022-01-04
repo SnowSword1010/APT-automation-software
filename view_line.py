@@ -53,7 +53,7 @@ def view(lineObjs, line_no, ip_address_table):
             # send_file_button => sends file_1 and file_2 to the selected monitor on the current production line
             self.send_file_button = tk.Button(top, text="Send File", command=lambda: send_file.send_file(ip_address_table["line"+str(line_no+1)][str(pc_no+1)], self.file_1.get(), self.file_2.get(), str(pc_no+1), top), padx=10, pady=5)
             # shutdown_button => shut downs the selected monitor on current production line
-            self.shutdown_button = tk.Button(top, text="Shutdown", command=lambda: shut_file.shut_file((ip_address_table["line"+str(line_no+1)])[str(pc_no+1)], str(pc_no+1), top), padx=10, pady=5)
+            # self.shutdown_button = tk.Button(top, text="Shutdown", command=lambda: shut_file.shut_file((ip_address_table["line"+str(line_no+1)])[str(pc_no+1)], str(pc_no+1)), padx=10, pady=5)
             return
     
     # iterates over all monitors and initialises the above variables and buttons
@@ -66,5 +66,5 @@ def view(lineObjs, line_no, ip_address_table):
         pcObjs[i].browse_file_1_button.grid(row=i+2, column=1, padx=(81, 81), pady=(8,5))
         pcObjs[i].browse_file_2_button.grid(row=i+2, column=2, padx=(81, 81), pady=(8,5))
         pcObjs[i].send_file_button.grid(row=i+2, column=3, padx=(81, 81), pady=(8,5))
-        pcObjs[i].shutdown_button.grid(row=i+2, column=4, padx=(81, 81), pady=(8,5))
+        # pcObjs[i].shutdown_button.grid(row=i+2, column=4, padx=(81, 81), pady=(8,5))
     return

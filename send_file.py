@@ -27,7 +27,9 @@ def send_file(ip, filename1, filename2, monitor_no, top):
         # Message to be displayed when operation is not valid
         message.set("Kindly select both File 1 and File 2.\nIf case you want only one image to be displayed on the monitor, select the same image in both File 1 and File 2. Otherwise select distinct images.")
     else:
+        # tkinter Toplevel window to show status of connections
         progressBar = tkinter.Toplevel(top)
+        # prevents the users from interacting with any window other than progressBar
         progressBar.grab_set()
         progressBar.geometry('400x100')
         progressBar.title("Status of connections")
